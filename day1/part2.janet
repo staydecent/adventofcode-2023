@@ -25,15 +25,25 @@
   https://adventofcode.com/2023/day/1``
   [str]
   (def digit
-    '{:dig (range "09")
-      :digword (choice
-                 "one" "two" "three"
-                 "four" "five" "six"
-                 "seven" "eight" "nine")
-      :main (some (capture (choice :dig :digword)))})
-  (def indices (peg/match digit str))
-  (pp str)
-  (pp indices))
+    ``replacing digit words with number equivalent from:
+    https://git.sr.ht/~alect/advent-of-code/tree/main/item/2023/day-1.janet``
+    '{:digit (choice
+               (/ (if "one" 2) 1)
+               (/ (if "two" 2) 2)
+               (/ (if "three" 4) 3)
+               (/ (if "four" 3) 4)
+               (/ (if "five" 3) 5)
+               (/ (if "six" 2) 6)
+               (/ (if "seven" 4) 7)
+               (/ (if "eight" 4) 8)
+               (/ (if "nine" 3) 9)
+               (number :d))
+      :leftover (drop :a)
+      :main (some (choice :digit :leftover))})
+
+  (def digits (peg/match digit str))
+  (int/u64 (string (first digits)
+                   (last digits))))
 
 (defn main
   ``& denotes a variadic function, collecting all given args
