@@ -26,7 +26,10 @@
   [str]
   (def digit
     ``replacing digit words with number equivalent from:
-    https://git.sr.ht/~alect/advent-of-code/tree/main/item/2023/day-1.janet``
+    https://git.sr.ht/~alect/advent-of-code/tree/main/item/2023/day-1.janet
+    
+    '/' is an alias for 'replace'
+    https://janet-lang.org/docs/peg.html``
     '{:digit (choice
                (/ (if "one" 2) 1)
                (/ (if "two" 2) 2)
