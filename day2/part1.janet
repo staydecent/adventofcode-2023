@@ -15,11 +15,29 @@
         nil)
     lines))
 
-(defn get-draws
+(defn cube-counts
+  ``each draw has n cube counts delim'd by ', '``
+  [draw]
+  (let [counts (string/split ", " draw)]
+    (map (fn [c] (string/split " " c)) counts)))
+
+(defn is-possible
+  [counts]
+  (def p (map (fn [c]
+          (let [[n color] c]
+            (let [max (case color
+                        "red"   (inventory :r)
+                        "green" (inventory :g)
+                        "blue"  (inventory :b))]
+              (<= max n))))
+              counts)))
+
+(defn check-draws
   ``parse draw portion of line into array``
   [str]
   (let [draws (string/split "; " str)]
-    draws))
+    (let [counts (map cube-counts draws)]
+      (some is-possible counts))))
 
 (defn get-game
   ``parse line text into a game struct``
@@ -27,7 +45,7 @@
   (let [[h t] (string/split ": " line)]
     # slice tail to drop newline char
     (let [id (string/slice h -2) draws (string/slice t 0 -2)]
-      {:id (int/u64 id) :draws (get-draws draws)})))
+      {:id (int/u64 id) :possible (check-draws draws)})))
 
 (defn main
   [& args]
